@@ -16,9 +16,15 @@ namespace EstudoAPI.Controllers
         }
 
         [HttpPost]
-        public IActionResult Add(EmployeeViewModel employeeViewModel)
+        public IActionResult Add([FromForm] EmployeeViewModel employeeViewModel)
          {
-            var employee = new Employee(employeeViewModel.Name, employeeViewModel.Age, null);
+
+            var filePath = Path.Combine("Storage", employeeViewModel.Photo.FileName);
+
+            using Stream fileStream = new FileStream(filePath, FileMode.Create);
+            employeeViewModel.Photo.CopyTo(fileStream);
+
+            var employee = new Employee(employeeViewModel.Name, employeeViewModel.Age, filePath);
 
             _employeeRepository.Add(employee);
 
@@ -31,6 +37,17 @@ namespace EstudoAPI.Controllers
             var employess = _employeeRepository.Get();
 
             return Ok(employess);
+        }
+
+        [HttpPost]
+        [Route("{id}/GetImageById")]
+        public IActionResult GetImageById(int id)
+        {
+            var employeee = _employeeRepository.Get(id);
+
+            var dataBytes = System.IO.File.ReadAllBytes(employeee.photo);
+
+            return File(dataBytes, "image/png");
         }
     }
 }
