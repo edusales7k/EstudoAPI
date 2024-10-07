@@ -12,6 +12,7 @@ namespace EstudoAPI.Model
         public int age { get; set; }
         public string? photo { get; set; }
 
+        public Employee() { }
         public Employee(string name, int age, string photo) 
         {
             this.name = name ?? throw new ArgumentNullException(nameof(name));

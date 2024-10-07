@@ -1,5 +1,6 @@
 ﻿using EstudoAPI.Model;
 using EstudoAPI.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EstudoAPI.Controllers
@@ -15,6 +16,7 @@ namespace EstudoAPI.Controllers
             _employeeRepository = employeeRepository ?? throw new ArgumentNullException(nameof(employeeRepository));
         }
 
+        [Authorize]
         [HttpPost]
         public IActionResult Add([FromForm] EmployeeViewModel employeeViewModel)
          {
@@ -31,6 +33,7 @@ namespace EstudoAPI.Controllers
             return Ok();
         }
 
+        [Authorize]
         [HttpGet]
         public IActionResult Get()
         {
@@ -39,6 +42,7 @@ namespace EstudoAPI.Controllers
             return Ok(employess);
         }
 
+        [Authorize]
         [HttpPost]
         [Route("{id}/GetImageById")]
         public IActionResult GetImageById(int id)
